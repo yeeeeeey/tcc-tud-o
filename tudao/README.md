@@ -66,23 +66,32 @@ O email informado é usado como `login` na API.
 
 | Recurso | Rota |
 |---|---|
-| Usuários | `POST /usuarios`, `POST /usuarios/login`, `GET/PUT/DELETE /usuarios/:id` |
-| Produtos | `/produtos` |
-| Armazéns | `/armazens` |
-| Movimentações | `/movimentacoes` |
-| Entregas | `/entregas` |
-| Rastreamento | `/rastreamento` |
-| Transportadoras | `/transportadoras` |
-| Veículos | `/veiculos` |
+| Usuários | `POST /api/usuarios`, `POST /api/usuarios/login`, `GET/PUT/DELETE /api/usuarios/:id` |
+| Produtos | `/api/produtos` |
+| Armazéns | `/api/armazens` |
+| Movimentações | `/api/movimentacoes` |
+| Entregas | `/api/entregas` |
+| Rastreamento | `/api/rastreamento` |
+| Transportadoras | `/api/transportadoras` |
+| Veículos | `/api/veiculos` |
 
-Exemplos de chamadas em PowerShell estão em `docs/comandos-powershell.txt`.
+Todas as rotas ficam sob `/api` (ex.: `/api/produtos`). Exemplos de chamadas em PowerShell estão em `docs/comandos-powershell.txt`.
 
 ## Deploy (Vercel)
 
-O back-end e o front-end são publicados como **dois projetos separados** na Vercel:
+Um único projeto na Vercel publica front-end e back-end no mesmo domínio, usando o recurso **Services** (`vercel.json` na raiz):
 
-- **Back-end:** Root Directory = `backend` (usa o `backend/vercel.json`). Variável de ambiente: `DATABASE_URL`.
-- **Front-end:** Root Directory = `frontend` (preset Vite). Variável de ambiente: `VITE_API_URL` com a URL pública do back-end.
+- `/api/*` → back-end (Express)
+- todo o resto → front-end (React/Vite)
+
+Passos:
+
+1. Importe o repositório como novo projeto na Vercel.
+2. Em *Settings → Build and Deployment → Framework Preset*, escolha **Services**.
+3. Em *Settings → Environment Variables*, crie `DATABASE_URL` com a string de conexão da Neon.
+4. Faça o deploy. **Não** defina `VITE_API_URL` na Vercel: o front usa o mesmo domínio automaticamente.
+
+> Se no seu repositório as pastas `backend` e `frontend` estiverem dentro de outra pasta (por exemplo `tudao/`), ajuste os `root` do `vercel.json` para `tudao/backend` e `tudao/frontend`.
 
 ## Licença
 
